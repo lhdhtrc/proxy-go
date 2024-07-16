@@ -1,6 +1,8 @@
-## Lhdht Microservice Golang Version
+## Grpc Proxy Grpc
+Simple implementation grpc agent grpc, used on the gateway
 
-## example
+### How to use it?
+
 ```go
 package main
 
@@ -12,11 +14,8 @@ import (
 	"google.golang.org/grpc/encoding"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"net"
 )
-
-func init() {
-	encoding.RegisterCodec(grpcProxy.Codec())
-}
 
 func main() {
 	director := func(ctx context.Context, fullMethodName string) (context.Context, *grpc.ClientConn, error) {
@@ -39,7 +38,12 @@ func main() {
 		return ctx, cc, err
 	}
 
-	grpc.WithDefaultCallOptions(grpc.CallContentSubtype(grpcProxy.Codec().Name()))
+	listen, _ := net.Listen("tcp", 8080)
 	server := grpc.NewServer(grpc.UnknownServiceHandler(grpcProxy.TransparentHandler(director)))
+	_ = server.Serve(listen)
 }
 ```
+
+### Finally
+- If you feel good, click on star.
+- If you have a good suggestion, please ask the issue.
