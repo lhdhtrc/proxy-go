@@ -119,7 +119,8 @@ func (h *handler) forwardClientToServer(src grpc.ClientStream, dst grpc.ServerSt
 					break
 				}
 			}
-			fmt.Println("response", f)
+			fmt.Println("response", f.String())
+			fmt.Println("response", f.ProtoReflect())
 			if err := dst.SendMsg(f); err != nil {
 				ret <- err
 				break
@@ -138,7 +139,8 @@ func (h *handler) forwardServerToClient(src grpc.ServerStream, dst grpc.ClientSt
 				ret <- err
 				break
 			}
-			fmt.Println("request", f)
+			fmt.Println("request", f.String())
+			fmt.Println("request", f.ProtoReflect())
 			if err := dst.SendMsg(f); err != nil {
 				ret <- err
 				break
